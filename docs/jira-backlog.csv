@@ -1,0 +1,19 @@
+Summary,Issue Type,Description,Priority,Labels,Epic Name,Epic Link
+"Import Functionality",Epic,"Implement features to import grocery lists from various sources",High,"grocerytool,mvp",,
+"Price Comparison Engine",Epic,"Build core engine to compare prices across stores and normalize units",High,"grocerytool,mvp",,
+"Store Adapters",Epic,"Create adapters for each supported grocery store",Medium,"grocerytool,mvp",,
+"User Authentication",Epic,"Implement user authentication and list management",Medium,"grocerytool,mvp",,
+"Product Catalog Management",Epic,"Develop central product catalog with matching algorithms",Low,"grocerytool,mvp",,
+"CSV Import Implementation",Story,"Create CSV parser with column mapping for flexible imports",High,"grocerytool,mvp","Import Functionality","Import Functionality"
+"Text Import with Quantity/Unit Parsing",Story,"Implement line-by-line text import with regex parsing for quantities and units",Medium,"grocerytool,mvp","Import Functionality","Import Functionality"
+"Google Sheets Integration",Story,"Add support for importing from Google Sheets via URL",Low,"grocerytool,mvp","Import Functionality","Import Functionality"
+"Unit Normalization Engine",Story,"Build system to convert between units (g/kg/ml/l/ea) and calculate per-unit prices",High,"grocerytool,mvp","Price Comparison Engine","Price Comparison Engine"
+"Best Price Algorithm",Story,"Implement algorithm to determine best store per item and optimal shopping split",High,"grocerytool,mvp","Price Comparison Engine","Price Comparison Engine"
+"Walmart Adapter",Story,"Create adapter to fetch and parse Walmart.ca product data using ScrapingBee",High,"grocerytool,mvp","Store Adapters","Store Adapters"
+"No Frills/PC Express Adapter",Story,"Create adapter to fetch and parse No Frills product data using ScrapingBee",Medium,"grocerytool,mvp","Store Adapters","Store Adapters"
+"Food Basics Adapter",Story,"Create adapter to fetch and parse Food Basics product data using ScrapingBee",Medium,"grocerytool,mvp","Store Adapters","Store Adapters"
+"Costco Adapter",Story,"Create adapter to fetch and parse Costco.ca product data using ScrapingBee",Low,"grocerytool,mvp","Store Adapters","Store Adapters"
+"Magic Link Authentication",Story,"Implement email magic link authentication flow with Supabase",High,"grocerytool,mvp","User Authentication","User Authentication"
+"List Management CRUD",Story,"Create API endpoints for list operations with proper RLS policies",Medium,"grocerytool,mvp","User Authentication","User Authentication"
+"Product Matching Algorithm",Story,"Develop fuzzy matching algorithm to link store products to canonical products",Medium,"grocerytool,mvp","Product Catalog Management","Product Catalog Management"
+"Price History Storage",Story,"Implement time-series storage for price history with latest price view",Low,"grocerytool,mvp","Product Catalog Management","Product Catalog Management"
