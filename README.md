@@ -1,21 +1,32 @@
-# Grocery Price Optimizer MVP
+# 🛒 Grocery Price Optimizer
 
-Compare real-time grocery prices across No Frills, Food Basics, Walmart, and Costco (ON, Canada).  
-Import a list, check which store is cheapest for each item, and get store-specific sub-lists.
+**Find the best grocery deals across Ontario stores in seconds!**
 
-## Features
-* Import grocery list (CSV / JSON / plain text / Google Sheets)
-* Supabase Auth (magic-link)
-* View & manage lists
-* Price check across selected stores (mock data → ScrapingBee adapter WIP)
-* Unit normalization ($/kg, $/L, $/ea)
-* Row-level-secure Postgres schema (canonical products, store SKUs, pricing history)
+Compare real-time prices across No Frills, Food Basics, Walmart, and Costco. Import your shopping list, get instant price comparisons, and optimize your grocery shopping to save money.
 
-### Work-in-Progress
-* Live scraping via ScrapingBee
-* Voice input (Web Speech → Whisper fallback)
-* Cart pre-fill for Walmart & PC Express
-* Embedding-based product matching (pgvector)
+## ✨ Features
+
+### 📋 Smart List Management
+* **Multi-format import**: CSV, JSON, plain text, or Google Sheets
+* **Intelligent parsing**: Automatically extracts quantities, units, and notes
+* **Persistent storage**: Save and manage multiple shopping lists
+
+### 💰 Price Comparison
+* **Multi-store comparison**: No Frills, Food Basics, Walmart, Costco
+* **Smart recommendations**: See which store is cheapest for each item
+* **Unit price normalization**: Compare $/kg, $/L, $/ea fairly across products
+* **Store totals**: Get total cost breakdown by store
+
+### 🔐 Secure & Private
+* **Magic-link authentication**: No passwords required
+* **Row-level security**: Your data is private and secure
+* **Demo mode**: Try the app without signing up
+
+### 🎯 Coming Soon
+* **Live price scraping**: Real-time data via ScrapingBee API
+* **Voice input**: Add items by speaking (Web Speech + Whisper)
+* **Cart integration**: Pre-fill Walmart & PC Express carts
+* **AI matching**: Smart product matching using embeddings
 
 ## Tech Stack
 * Next.js (App Router, TypeScript) — deployed on Vercel
@@ -24,44 +35,45 @@ Import a list, check which store is cheapest for each item, and get store-specif
 * React / Tailwind-free custom CSS
 * Zod, PapaParse
 
-## Getting Started
+## 🚀 Quick Start
 
-### Prerequisites
-1. Node 18+
-2. Supabase project
-3. ScrapingBee API key (free 1 000 req/mo)
-4. (Optional) Vercel account
-
-### Environment variables
-
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon/public key |
-| `SUPABASE_SERVICE_ROLE_KEY` | **Server-only** service role key |
-| `SCRAPINGBEE_API_KEY` | ScrapingBee key |
-| `DEFAULT_POSTAL_CODE` | e.g. `L3K 1V8` |
-| `COSTCO_MEMBER` | `1` if member, else `0` |
-| `OPENROUTER_API_KEY` | LLM calls (server-only) |
-
-Store secrets (.env.local) are git-ignored.
-
-### Install & run (local)
+### Try Demo Mode (No Setup Required!)
 
 ```bash
-git clone <repo-url>
-cd grocerytool
-cp .env.local.example .env.local      # fill in vars
 npm install
-npm run dev                           # http://localhost:3000
+npm run dev
 ```
 
-### Build & start
+Open [http://localhost:3000](http://localhost:3000) and start using the app right away! Demo mode uses local storage and sample data.
 
-```bash
-npm run build
-npm start
-```
+### Production Setup
+
+1. **Create a Supabase project** at [supabase.com](https://supabase.com)
+2. **Configure environment variables**:
+   ```bash
+   cp .env.local.example .env.local
+   # Edit .env.local with your Supabase credentials
+   ```
+3. **Run database migrations** (see [docs/SETUP.md](docs/SETUP.md))
+4. **Start the application**:
+   ```bash
+   npm run dev
+   ```
+
+For detailed setup instructions, see [**Setup Guide**](docs/SETUP.md).
+
+## 🔧 Configuration
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes* | Your Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes* | Supabase anon/public key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes* | Supabase service role key (server-only) |
+| `SCRAPINGBEE_API_KEY` | No | ScrapingBee API key for live prices |
+| `DEFAULT_POSTAL_CODE` | No | Default postal code (default: L3K 1V8) |
+| `COSTCO_MEMBER` | No | Set to 1 if Costco member (default: 1) |
+
+*Not required for demo mode
 
 ## Database
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabaseClient';
 import { Session } from '@supabase/supabase-js';
+import { isDemoMode, getDemoLists, getDemoSession, type DemoList } from '@/lib/demoMode';
 
 type List = {
   id: string;
@@ -17,8 +18,29 @@ export default function ListsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
 
   useEffect(() => {
+    // Check if we're in demo mode
+    const isDemo = isDemoMode();
+    setDemoMode(isDemo);
+    
+    if (isDemo) {
+      // Use demo data
+      const demoLists = getDemoLists();
+      const demoSession = getDemoSession();
+      
+      setSession(demoSession as any);
+      setLists(demoLists.map(list => ({
+        id: list.id,
+        name: list.name,
+        created_at: list.created_at,
+        item_count: list.items.length
+      })));
+      setLoading(false);
+      return;
+    }
+
     // Check for session and fetch lists
     const fetchSessionAndLists = async () => {
       setLoading(true);
@@ -73,22 +95,24 @@ export default function ListsPage() {
 
     fetchSessionAndLists();
 
-    // Set up auth state change listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, currentSession) => {
-        setSession(currentSession);
-        if (currentSession) {
-          fetchSessionAndLists();
-        } else {
-          setLists([]);
+    // Set up auth state change listener only if not in demo mode
+    if (!isDemo) {
+      const { data: { subscription } } = supabase.auth.onAuthStateChange(
+        (_event, currentSession) => {
+          setSession(currentSession);
+          if (currentSession) {
+            fetchSessionAndLists();
+          } else {
+            setLists([]);
+          }
         }
-      }
-    );
+      );
 
-    // Clean up subscription on unmount
-    return () => {
-      subscription.unsubscribe();
-    };
+      // Clean up subscription on unmount
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
   }, []);
 
   // Format date to be more readable

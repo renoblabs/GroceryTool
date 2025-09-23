@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
+import { isDemoMode, getDemoList, getDemoSession, generateDemoPrice } from '@/lib/demoMode';
 import Link from 'next/link';
 
 type ListItem = {
@@ -56,8 +57,32 @@ export default function ListDetailPage() {
     walmart: true,
     costco: true
   });
+  const [demoMode, setDemoMode] = useState(false);
 
   useEffect(() => {
+    const isDemo = isDemoMode();
+    setDemoMode(isDemo);
+    
+    if (isDemo) {
+      // Use demo data
+      const demoList = getDemoList(listId);
+      
+      if (!demoList) {
+        setError('List not found');
+        setLoading(false);
+        return;
+      }
+      
+      setList({
+        id: demoList.id,
+        name: demoList.name,
+        created_at: demoList.created_at
+      });
+      setItems(demoList.items);
+      setLoading(false);
+      return;
+    }
+
     const fetchListAndItems = async () => {
       setLoading(true);
       setError(null);
@@ -117,6 +142,39 @@ export default function ListDetailPage() {
     setPriceError(null);
 
     try {
+      if (demoMode) {
+        // Generate demo price results
+        const selectedStores = Object.entries(stores)
+          .filter(([, selected]) => selected)
+          .map(([store]) => store);
+        
+        const mockResults = items.map(item => {
+          const storeResults: any = {};
+          let bestPrice = Infinity;
+          let bestStore = 'walmart';
+          
+          selectedStores.forEach(store => {
+            const storePrice = generateDemoPrice(item.raw_text, store);
+            storeResults[store] = storePrice;
+            
+            if (storePrice.available && storePrice.price < bestPrice) {
+              bestPrice = storePrice.price;
+              bestStore = store;
+            }
+          });
+          
+          return {
+            item_id: item.id,
+            raw_text: item.raw_text,
+            ...storeResults,
+            best_store: bestStore as 'nofrills' | 'foodbasics' | 'walmart' | 'costco',
+          };
+        });
+        
+        setPriceResults(mockResults);
+        return;
+      }
+
       // Get current session and token
       const { data: { session } } = await supabase.auth.getSession();
       const token = session?.access_token;
@@ -345,9 +403,9 @@ export default function ListDetailPage() {
         <div className="price-results">
           <h2 className="mb-2">Price Comparison Results</h2>
           
-          <div className="results-summary card mb-4">
-            <h3 className="mb-2">Summary</h3>
-            <div className="summary-stats">
+          <div className="card mb-4">
+            <h3 className="mb-4">Store Totals</h3>
+            <div className="summary-grid">
               {Object.entries(stores)
                 .filter(([, selected]) => selected)
                 .map(([store]) => {
@@ -361,10 +419,10 @@ export default function ListDetailPage() {
                   ).length;
                   
                   return (
-                    <div key={store} className="store-summary">
-                      <h4>{getStoreName(store)}</h4>
-                      <p className="total">{formatCurrency(storeTotal)}</p>
-                      <p className="text-sm text-gray">{itemCount} of {items.length} items available</p>
+                    <div key={store} className="summary-card">
+                      <div className="title">{getStoreName(store)}</div>
+                      <div className="value">{formatCurrency(storeTotal)}</div>
+                      <div className="subtitle">{itemCount} of {items.length} items available</div>
                     </div>
                   );
                 })}
@@ -397,9 +455,9 @@ export default function ListDetailPage() {
           </div>
           
           <div className="detailed-results">
-            <h3 className="mb-2">Detailed Price Comparison</h3>
-            <div className="table-responsive">
-              <table>
+            <h3 className="mb-4">Detailed Price Comparison</h3>
+            <div className="table-container">
+              <table className="price-comparison-table">
                 <thead>
                   <tr>
                     <th>Item</th>
@@ -421,11 +479,12 @@ export default function ListDetailPage() {
                           const storeData = result[store as keyof PriceResult] as StorePrice | undefined;
                           
                           if (!storeData || !storeData.available) {
-                            return <td key={store} className="not-available">Not available</td>;
+                            return <td key={store} className="not-available-cell">Not available</td>;
                           }
                           
+                          const isbestPrice = result.best_store === store;
                           return (
-                            <td key={store} className={result.best_store === store ? 'best-price' : ''}>
+                            <td key={store} className={`store-price-cell ${isbestPrice ? 'best-price-cell' : ''}`}>
                               <div className="price">{formatCurrency(storeData.price)}</div>
                               {storeData.unit_price && (
                                 <div className="unit-price text-sm">

@@ -4,6 +4,7 @@ import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Papa from 'papaparse';
 import { supabase } from '@/lib/supabaseClient';
+import { isDemoMode, createDemoList } from '@/lib/demoMode';
 
 type ImportMethod = 'file' | 'text' | 'url';
 type ParsedItem = {
@@ -296,6 +297,13 @@ export default function ImportPage() {
     setLoading(true);
     
     try {
+      if (isDemoMode()) {
+        // Create demo list
+        const newList = createDemoList(listName, parsedItems);
+        router.push(`/lists/${newList.id}`);
+        return;
+      }
+
       // Get current session and token
       const { data: { session } } = await supabase.auth.getSession();
 

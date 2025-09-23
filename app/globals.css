@@ -208,6 +208,241 @@ input:focus, textarea:focus, select:focus {
   background-color: rgba(0, 112, 243, 0.05);
 }
 
+/* Grid utilities */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+
+/* Loading states */
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--gray-500);
+}
+
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  border: 2px solid var(--gray-300);
+  border-top: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Alert styles */
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+}
+
+.alert-error {
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+.alert-success {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #16a34a;
+}
+
+.alert-warning {
+  background-color: #fffbeb;
+  border: 1px solid #fed7aa;
+  color: #d97706;
+}
+
+/* Price comparison specific styles */
+.price-comparison-table {
+  font-size: 0.875rem;
+}
+
+.price-comparison-table td {
+  vertical-align: top;
+  padding: 1rem 0.5rem;
+}
+
+.store-price-cell {
+  min-width: 120px;
+}
+
+.store-price-cell .price {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--foreground);
+}
+
+.store-price-cell .unit-price {
+  color: var(--gray-500);
+  font-size: 0.8rem;
+}
+
+.store-price-cell .product-name {
+  color: var(--gray-600);
+  font-size: 0.8rem;
+  margin: 0.25rem 0;
+}
+
+.store-price-cell .size {
+  color: var(--gray-500);
+  font-size: 0.75rem;
+}
+
+.best-price-cell {
+  background-color: #f0f9ff;
+  border-left: 3px solid var(--accent);
+}
+
+.not-available-cell {
+  color: var(--gray-400);
+  font-style: italic;
+  text-align: center;
+}
+
+/* Store selection toggles */
+.store-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.store-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gray-300);
+  border-radius: var(--border-radius);
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.store-toggle:hover {
+  border-color: var(--primary);
+  background-color: #f8fafc;
+}
+
+.store-toggle.selected {
+  background-color: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.store-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: white;
+}
+
+/* Button variants */
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-small {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-large {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.125rem;
+}
+
+/* Summary cards */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.summary-card {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: var(--border-radius);
+  text-align: center;
+}
+
+.summary-card .title {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.summary-card .value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.summary-card .subtitle {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
+}
+
+/* Table improvements */
+.table-container {
+  overflow-x: auto;
+  margin: 1rem 0;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--border-radius);
+}
+
+.table-container table {
+  margin: 0;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Status indicators */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.status-available {
+  background-color: var(--success);
+}
+
+.status-unavailable {
+  background-color: var(--error);
+}
+
+.status-unknown {
+  background-color: var(--gray-400);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .header .container {
@@ -219,5 +454,39 @@ input:focus, textarea:focus, select:focus {
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .summary-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .store-toggles {
+    justify-content: center;
+  }
+  
+  .price-comparison-table {
+    font-size: 0.75rem;
+  }
+  
+  .price-comparison-table td {
+    padding: 0.5rem 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .summary-card {
+    padding: 1rem;
+  }
+  
+  .summary-card .value {
+    font-size: 1.5rem;
   }
 }
