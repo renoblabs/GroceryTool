@@ -104,7 +104,7 @@ export default function ImportPage() {
           
           setParsedItems(items);
         },
-        error: (err) => {
+        error: (err: any) => {
           setError(`CSV parsing error: ${err.message}`);
           console.error(err);
         }
@@ -246,7 +246,7 @@ export default function ImportPage() {
           
           setParsedItems(items);
         },
-        error: (err) => {
+        error: (err: any) => {
           setError(`CSV parsing error: ${err.message}`);
           console.error(err);
         }
@@ -298,8 +298,11 @@ export default function ImportPage() {
     
     try {
       if (isDemoMode()) {
-        // Create demo list
-        const newList = createDemoList(listName, parsedItems);
+        const demoItems = parsedItems.map(({ item, ...rest }) => ({
+          raw_text: item,
+          ...rest
+        }));
+        const newList = createDemoList(listName, demoItems);
         router.push(`/lists/${newList.id}`);
         return;
       }

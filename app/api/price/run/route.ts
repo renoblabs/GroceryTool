@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { getAdminClient } from '@/lib/supabaseAdmin';
+import { searchNoFrills as searchNoFrillsAdapter } from '@/lib/adapters/nofrills';
+import { searchFoodBasics as searchFoodBasicsAdapter } from '@/lib/adapters/foodbasics';
+import { searchWalmart as searchWalmartAdapter } from '@/lib/adapters/walmart';
+import { searchCostco as searchCostcoAdapter } from '@/lib/adapters/costco';
 
 type PriceRunRequest = {
   list_id: string;
@@ -200,82 +204,20 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// Store adapter functions - these will eventually use ScrapingBee to fetch real data
-
 async function searchNoFrills(item: ListItem, postal: string): Promise<StorePrice> {
-  // This would use ScrapingBee to search No Frills website
-  // const apiKey = process.env.SCRAPINGBEE_API_KEY;
-  // const url = `https://www.nofrills.ca/api/v2/products/search?q=${encodeURIComponent(item.raw_text)}`;
-  
-  // For MVP, return mock data
-  const price = (Math.random() * 10 + 1).toFixed(2) * 1;
-  const unitPrice = (Math.random() * 2 + 0.5).toFixed(2) * 1;
-  
-  return {
-    price,
-    unit_price: unitPrice,
-    available: Math.random() > 0.1,
-    product_name: `No Frills ${item.raw_text}`,
-    size: item.quantity ? `${item.quantity} ${item.unit || 'ea'}` : 'each',
-    url: `https://www.nofrills.ca/search?query=${encodeURIComponent(item.raw_text)}`,
-  };
+  return searchNoFrillsAdapter(item, postal);
 }
 
 async function searchFoodBasics(item: ListItem, postal: string): Promise<StorePrice> {
-  // This would use ScrapingBee to search Food Basics website
-  // const apiKey = process.env.SCRAPINGBEE_API_KEY;
-  // const url = `https://www.foodbasics.ca/api/v1/products/search?q=${encodeURIComponent(item.raw_text)}`;
-  
-  // For MVP, return mock data
-  const price = (Math.random() * 10 + 1).toFixed(2) * 1;
-  const unitPrice = (Math.random() * 2 + 0.5).toFixed(2) * 1;
-  
-  return {
-    price,
-    unit_price: unitPrice,
-    available: Math.random() > 0.2,
-    product_name: `Food Basics ${item.raw_text}`,
-    size: item.quantity ? `${item.quantity} ${item.unit || 'ea'}` : 'each',
-    url: `https://www.foodbasics.ca/search?query=${encodeURIComponent(item.raw_text)}`,
-  };
+  return searchFoodBasicsAdapter(item, postal);
 }
 
 async function searchWalmart(item: ListItem, postal: string): Promise<StorePrice> {
-  // This would use ScrapingBee to search Walmart website
-  // const apiKey = process.env.SCRAPINGBEE_API_KEY;
-  // const url = `https://www.walmart.ca/api/product-page/find-in-store?lang=en&upc=&postalCode=${postal}&product_id=...`;
-  
-  // For MVP, return mock data
-  const price = (Math.random() * 10 + 1).toFixed(2) * 1;
-  const unitPrice = (Math.random() * 2 + 0.5).toFixed(2) * 1;
-  
-  return {
-    price,
-    unit_price: unitPrice,
-    available: Math.random() > 0.15,
-    product_name: `Walmart ${item.raw_text}`,
-    size: item.quantity ? `${item.quantity} ${item.unit || 'ea'}` : 'each',
-    url: `https://www.walmart.ca/search?q=${encodeURIComponent(item.raw_text)}`,
-  };
+  return searchWalmartAdapter(item, postal);
 }
 
 async function searchCostco(item: ListItem, postal: string): Promise<StorePrice> {
-  // This would use ScrapingBee to search Costco website
-  // const apiKey = process.env.SCRAPINGBEE_API_KEY;
-  // const url = `https://www.costco.ca/CatalogSearch?keyword=${encodeURIComponent(item.raw_text)}`;
-  
-  // For MVP, return mock data
-  const price = (Math.random() * 15 + 5).toFixed(2) * 1;
-  const unitPrice = (Math.random() * 1 + 0.3).toFixed(2) * 1;
-  
-  return {
-    price,
-    unit_price: unitPrice,
-    available: Math.random() > 0.3,
-    product_name: `Kirkland ${item.raw_text}`,
-    size: item.quantity ? `${item.quantity * 2} ${item.unit || 'ea'}` : 'bulk',
-    url: `https://www.costco.ca/CatalogSearch?keyword=${encodeURIComponent(item.raw_text)}`,
-  };
+  return searchCostcoAdapter(item, postal);
 }
 
 // Function to store products and prices (placeholder for future implementation)
