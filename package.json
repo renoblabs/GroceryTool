@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "setup-db": "node scripts/setup-db.js",
+    "demo-scraping": "node scripts/demo-scraping.js",
+    "test-my-list": "node scripts/test-my-list.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.45.0",
